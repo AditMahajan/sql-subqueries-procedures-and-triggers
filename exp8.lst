@@ -1,0 +1,238 @@
+
+SQL*Plus: Release 11.2.0.4.0 Production on Wed Mar 16 16:00:14 2022
+
+Copyright (c) 1982, 2013, Oracle.  All rights reserved.
+
+Enter user-name: RA1911003010495/RA1911003010495@h1-mkarthikeyan.co86hfjmfjkx.us-west-2.rds.amazonaws.com:1521/h1
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+
+SQL> spool exp8.lst
+SQL> create table employee(empnum number(5),ename varchar2(20),job varchar2(20),sal number(6), mrgnum number(4),deptnum number(6));
+create table employee(empnum number(5),ename varchar2(20),job varchar2(20),sal number(6), mrgnum number(4),deptnum number(6))
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+SQL> desc employee
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPNO                                              NUMBER(38)
+ NAME                                               VARCHAR2(20)
+ JOB                                                VARCHAR2(20)
+ DEPTNO                                             NUMBER
+ SAL                                                NUMBER
+
+SQL> create table employee3(empnum number(5),ename varchar2(20),job varchar2(20),sal number(6), mrgnum number(4),deptnum number(6));
+create table employee3(empnum number(5),ename varchar2(20),job varchar2(20),sal number(6), mrgnum number(4),deptnum number(6))
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+SQL> create table employee2812(empnum number(5),ename varchar2(20),job varchar2(20),sal number(6), mrgnum number(4),deptnum number(6));
+
+Table created.
+
+SQL> insert into employee2812 values(1001,'jimmy','programmer',20000,1560,200);
+
+1 row created.
+
+SQL> insert into employee2812 values(1002,'bruno','clerk',2000,1570,201);
+
+1 row created.
+
+SQL> insert into employee2812 values(1003,'neo','developer',15000,1580,202);
+
+1 row created.
+
+SQL> insert into employee2812 values(1004,'yoru','tester',5000,1590,203);
+
+1 row created.
+
+SQL> insert into employee2812 values(1005,'cherry','clerk',1000,1600,204);
+
+1 row created.
+
+SQL> select * from employee2812;
+
+    EMPNUM ENAME                JOB                         SAL     MRGNUM
+---------- -------------------- -------------------- ---------- ----------
+   DEPTNUM
+----------
+      1001 jimmy                programmer                20000       1560
+       200
+
+      1002 bruno                clerk                      2000       1570
+       201
+
+      1003 neo                  developer                 15000       1580
+       202
+
+
+    EMPNUM ENAME                JOB                         SAL     MRGNUM
+---------- -------------------- -------------------- ---------- ----------
+   DEPTNUM
+----------
+      1004 yoru                 tester                     5000       1590
+       203
+
+      1005 cherry               clerk                      1000       1600
+       204
+
+
+SQL> create table dept2812(deptnum number(5),deptname varchar2(10),location varchar2(15));
+
+Table created.
+
+SQL> insert into dept2812 values(&deptnum,'&deptname','&location');
+Enter value for deptnum: 107
+Enter value for deptname: developer
+Enter value for location: rio
+old   1: insert into dept2812 values(&deptnum,'&deptname','&location')
+new   1: insert into dept2812 values(107,'developer','rio')
+
+1 row created.
+
+SQL> /
+Enter value for deptnum: 200
+Enter value for deptname: debugger
+Enter value for location: tokyo
+old   1: insert into dept2812 values(&deptnum,'&deptname','&location')
+new   1: insert into dept2812 values(200,'debugger','tokyo')
+
+1 row created.
+
+SQL> /
+Enter value for deptnum: 201
+Enter value for deptname: tester
+Enter value for location: helsinki
+old   1: insert into dept2812 values(&deptnum,'&deptname','&location')
+new   1: insert into dept2812 values(201,'tester','helsinki')
+
+1 row created.
+
+SQL> /
+Enter value for deptnum: 202
+Enter value for deptname: developer
+Enter value for location: lisbon
+old   1: insert into dept2812 values(&deptnum,'&deptname','&location')
+new   1: insert into dept2812 values(202,'developer','lisbon')
+
+1 row created.
+
+SQL> select * from dept2812;
+
+   DEPTNUM DEPTNAME   LOCATION
+---------- ---------- ---------------
+       107 developer  rio
+       200 debugger   tokyo
+       201 tester     helsinki
+       202 developer  lisbon
+
+SQL> select ename from employee2812 where sal>(select min(sal) from employee2812 where deptnum=(select deptnum from dept2812 where location = 'lisbon'));
+
+ENAME
+--------------------
+jimmy
+
+SQL> select ename,job,sal from employee2812 where sal = (select min(sal) from employee2812);
+
+ENAME                JOB                         SAL
+-------------------- -------------------- ----------
+cherry               clerk                      1000
+
+SQL> select * from employee2812;
+
+    EMPNUM ENAME                JOB                         SAL     MRGNUM
+---------- -------------------- -------------------- ---------- ----------
+   DEPTNUM
+----------
+      1001 jimmy                programmer                20000       1560
+       200
+
+      1002 bruno                clerk                      2000       1570
+       201
+
+      1003 neo                  developer                 15000       1580
+       202
+
+
+    EMPNUM ENAME                JOB                         SAL     MRGNUM
+---------- -------------------- -------------------- ---------- ----------
+   DEPTNUM
+----------
+      1004 yoru                 tester                     5000       1590
+       203
+
+      1005 cherry               clerk                      1000       1600
+       204
+
+
+SQL> select deptnum,min(sal),from employee2812 groupby deptnum having min(sal)>(select min(sal) from employee2812 where deptnum=202);
+select deptnum,min(sal),from employee2812 groupby deptnum having min(sal)>(select min(sal) from employee2812 where deptnum=202)
+                        *
+ERROR at line 1:
+ORA-00936: missing expression
+
+
+SQL> commit
+  2
+SQL> commit;
+
+Commit complete.
+
+SQL> select empnum,ename,job from employee2812 where sal<any(select sal from employee2812 where job = 'clerk')and job<>'clerk;
+ERROR:
+ORA-01756: quoted string not properly terminated
+
+
+SQL> select empnum,ename,job from employee2812 where sal<any(select sal from employee2812 where job = 'clerk')and job<>'clerk';
+
+no rows selected
+
+SQL> select * from employee2812;
+
+    EMPNUM ENAME                JOB                         SAL     MRGNUM
+---------- -------------------- -------------------- ---------- ----------
+   DEPTNUM
+----------
+      1001 jimmy                programmer                20000       1560
+       200
+
+      1002 bruno                clerk                      2000       1570
+       201
+
+      1003 neo                  developer                 15000       1580
+       202
+
+
+    EMPNUM ENAME                JOB                         SAL     MRGNUM
+---------- -------------------- -------------------- ---------- ----------
+   DEPTNUM
+----------
+      1004 yoru                 tester                     5000       1590
+       203
+
+      1005 cherry               clerk                      1000       1600
+       204
+
+
+SQL> select empnum,ename,job from employee2812 where sal<any(select sal from employee2812 where job = 'clerk');
+
+    EMPNUM ENAME                JOB
+---------- -------------------- --------------------
+      1005 cherry               clerk
+
+SQL> commit;
+
+Commit complete.
+
+SQL> rollback;
+
+Rollback complete.
+SQL> edit exp8.lst
+
+SQL>

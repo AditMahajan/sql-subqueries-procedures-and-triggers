@@ -1,0 +1,200 @@
+SQL> commit;
+
+Commit complete.
+
+SQL> create table STD049 ("Std_ID" number(6), "Std_name" varchar2(20),"Subject"
+  2  varchar2(10), "Sub_Code" number(2), "Marks" Number(2), "Grade" varchar2(20)) ;
+
+Table created.
+
+SQL> INSERT INTO STD049 ("Std_ID", "Std_Name" , "Subject" , "Sub_Code", "Marks" , "Grade")
+  2      WITH input AS (
+  3      SELECT 0001, 'Shushrut' , 'Maths', 10 ,  90 , 'A'  FROM dual UNION ALL
+  4      SELECT 0002, 'Viren'   , 'History', 30 ,  87 , 'B'    FROM dual UNION ALL
+  5      SELECT 0003, 'Vidhi', 'Physics'   , 20 ,   91 , 'A'  FROM dual UNION ALL
+  6      SELECT 0004, 'Sachin' , 'EVS' , 40 ,   83 , 'B'  FROM dual UNION ALL
+  7      SELECT 0005, 'Param', 'History'   , 50 ,   57 , 'D'  FROM dual
+  8      ) SELECT * FROM input ;
+INSERT INTO STD049 ("Std_ID", "Std_Name" , "Subject" , "Sub_Code", "Marks" , "Grade")
+                              *
+ERROR at line 1:
+ORA-00904: "Std_Name": invalid identifier 
+
+
+SQL> INSERT INTO STD049 ("Std_ID", "Std_Name" , "Subject" , "Sub_Code", "Marks" , "Grade")
+  2      WITH input AS (
+  3      SELECT 0001, 'Shushrut' , 'Maths', 10 ,  90 , 'A'  FROM dual UNION ALL
+  4      SELECT 0002, 'Viren'   , 'History', 30 ,  87 , 'B'    FROM dual UNION ALL
+  5      SELECT 0003, 'Vidhi', 'Physics'   , 20 ,   91 , 'A'  FROM dual UNION ALL
+  6      SELECT 0004, 'Sachin' , 'EVS' , 40 ,   83 , 'B'  FROM dual UNION ALL
+  7      SELECT 0005, 'Param', 'History'   , 50 ,   57 , 'D'  FROM dual
+  8      ) SELECT * FROM input ;
+INSERT INTO STD049 ("Std_ID", "Std_Name" , "Subject" , "Sub_Code", "Marks" , "Grade")
+                              *
+ERROR at line 1:
+ORA-00904: "Std_Name": invalid identifier 
+
+
+SQL> INSERT INTO STD049 ("Std_ID", "Std_Name" , "Subject" , "Sub_Code", "Marks" , "Grade")
+  2      WITH input AS (
+  3      SELECT 0001, 'Shushrut' , 'Maths', 10 ,  90 , 'A'  FROM dual UNION ALL
+  4      SELECT 0002, 'Viren'   , 'History', 30 ,  87 , 'B'    FROM dual UNION ALL
+  5      SELECT 0003, 'Vidhi', 'Physics'   , 20 ,   91 , 'A'  FROM dual UNION ALL
+  6      SELECT 0004, 'Sachin' , 'EVS' , 40 ,   83 , 'B'  FROM dual UNION ALL
+  7      SELECT 0005, 'Param', 'History'   , 50 ,   57 , 'D'  FROM dual
+  8      ) SELECT * FROM input ;
+INSERT INTO STD049 ("Std_ID", "Std_Name" , "Subject" , "Sub_Code", "Marks" , "Grade")
+                              *
+ERROR at line 1:
+ORA-00904: "Std_Name": invalid identifier 
+
+
+SQL> INSERT INTO STD049 ('&Std_ID', '&Std_Name' , '&Subject' , '&Sub_Code', '&Marks' , '&Grade')
+  2  ;
+Enter value for std_id: 0001
+Enter value for std_name: Achintya
+Enter value for subject: maths
+Enter value for sub_code: 10
+Enter value for marks: 99
+Enter value for grade: A
+old   1: INSERT INTO STD049 ('&Std_ID', '&Std_Name' , '&Subject' , '&Sub_Code', '&Marks' , '&Grade')
+new   1: INSERT INTO STD049 ('0001', 'Achintya' , 'maths' , '10', '99' , 'A')
+INSERT INTO STD049 ('0001', 'Achintya' , 'maths' , '10', '99' , 'A')
+                    *
+ERROR at line 1:
+ORA-00928: missing SELECT keyword 
+
+
+SQL> select * from std049;
+
+no rows selected
+
+SQL> INSERT INTO STD049 VALUES('0001','achintya','maths','10','99','A');
+
+1 row created.
+
+SQL> INSERT INTO STD049 VALUES('0002','ishan','history','30','88','B');
+
+1 row created.
+
+SQL> INSERT INTO STD049 VALUES('0003','ariz','civics','50','57','D');
+
+1 row created.
+
+SQL> create table stdn049 (rollno number(3), name varchar(2), m1 number(3), m2 number(3), m3 number(3), tot number(3), avrg number(3), result varchar(10));
+
+Table created.
+
+SQL> create or replace trigger t1 before insert on stdn
+  2  for each row
+  3  begin
+  4  :new.tot:=:new.m1+:new.m2+:new.m3;
+  5  :new.avrg:=:new.tot/3;
+  6  if(:new.m1>=50 and :new.m2>=50 and :new.m3>=50) THEN
+  7  :new.result:='pass';
+  8  else
+  9  :new.result:='Fail';
+ 10  end if;
+ 11  end;
+ 12  /
+create or replace trigger t1 before insert on stdn
+                                              *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> create or replace trigger t1 before insert on stdn049
+  2  for each row
+  3  begin
+  4  :new.tot:=:new.m1+:new.m2+:new.m3;
+  5  :new.avrg:=:new.tot/3;
+  6  if(:new.m1>=50 and :new.m2>=50 and :new.m3>=50) THEN
+  7  :new.result:='pass';
+  8  else
+  9  :new.result:='Fail';
+ 10  end if;
+ 11  end;
+ 12  /
+
+Trigger created.
+
+SQL> create table STUDENT049 (Id number(2), Name varchar(20), Age number(3), History number(3), Physics number(3), Maths number(3), Result varchar2(4));
+
+Table created.
+
+SQL> CREATE OR REPLACE TRIGGER grade_display
+  2  BEFORE INSERT ON STUDENT049
+  3  FOR EACH ROW
+  4  BEGIN
+  5  IF (:NEW.History >=50 and :NEW.Physics >= 50 and :NEW.Maths >= 50) THEN
+  6  :NEW.Result := 'PASS';
+  7  ELSE
+  8  :NEW.Result := 'FAIL';
+  9  END IF;
+ 10  END;
+ 11  /
+
+Trigger created.
+
+SQL> INSERT INTO STUDENT049 (Id, Name, Age, History, Physics, Maths) VALUES (01, 'Shushrut Kumar', 27, 99, 95, 100);
+
+1 row created.
+
+SQL> INSERT INTO STUDENT049 (Id, Name, Age, History, Physics, Maths) VALUES (02, 'Viren Parmar', 21, 92, 90, 95);
+
+1 row created.
+
+SQL> INSERT INTO STUDENT049 (Id, Name, Age, History, Physics, Maths) VALUES (03, 'Vidhi Rai', 49, 20, 55, 33);
+
+1 row created.
+
+SQL> CREATE OR REPLACE TRIGGER invalid_age
+  2  BEFORE INSERT ON STUDENT049
+  3  FOR EACH ROW
+  4  BEGIN
+  5  IF (:NEW.Age > 100) THEN
+  6  raise_application_error(-20000, 'INSERTING INVALID AGE!');
+  7  END IF;
+  8  END;
+  9  /
+
+Trigger created.
+
+SQL> INSERT INTO STUDENT049 (Id, Name, Age, History, Physics, Maths) VALUES (04, 'Sachin Tilokani', 120, 100, 49, 88);
+INSERT INTO STUDENT049 (Id, Name, Age, History, Physics, Maths) VALUES (04, 'Sachin Tilokani', 120, 100, 49, 88)
+            *
+ERROR at line 1:
+ORA-20000: INSERTING INVALID AGE! 
+ORA-06512: at "RA1911003010469.INVALID_AGE", line 3 
+ORA-04088: error during execution of trigger 'RA1911003010469.INVALID_AGE' 
+
+
+SQL> INSERT INTO STUDENT049 (Id, Name, Age, History, Physics, Maths) VALUES (04, 'Sachin Tilokani', 12, 100, 49, 88);
+
+1 row created.
+
+SQL> select * from STUDENT049;
+
+        ID NAME                        AGE    HISTORY    PHYSICS      MATHS RESU
+---------- -------------------- ---------- ---------- ---------- ---------- ----
+         1 Shushrut Kumar               27         99         95        100 PASS
+         2 Viren Parmar                 21         92         90         95 PASS
+         3 Vidhi Rai                    49         20         55         33 FAIL
+         4 Sachin Tilokani              12        100         49         88 FAIL
+
+SQL> desc student049;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                                 NUMBER(2)
+ NAME                                               VARCHAR2(20)
+ AGE                                                NUMBER(3)
+ HISTORY                                            NUMBER(3)
+ PHYSICS                                            NUMBER(3)
+ MATHS                                              NUMBER(3)
+ RESULT                                             VARCHAR2(4)
+
+SQL> INSERT INTO STUDENT049 (Id, Name, Age, History, Physics, Maths) VALUES (04, 'Sachin Tilokani', 80, 100, 49, 88);
+
+1 row created.
+
+SQL> spool off;
